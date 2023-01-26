@@ -12,7 +12,7 @@ model = "text-davinci-003"
 
 if __name__ == "__main__":
     user_input_file = input("Enter file name: ")
-    # doc = fetch_document("docs/19_Vermox100.txt")
+    # doc = fetch_document("docs/Vermox100.txt")
     doc = fetch_document(user_input_file)
     while True:
         user_input = input("SK: ")

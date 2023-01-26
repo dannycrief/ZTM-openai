@@ -26,29 +26,6 @@ def fetch_txt(filename_txt: str) -> str:
     return "".join(fetched_file.readlines()).replace("\n", " ")
 
 
-def get_text_from_image(pdf_path: str) -> list[str]:
-    pdf_file = wi(filename=pdf_path, resolution=1024)
-    pdf_img = pdf_file.convert('jpeg')
-    img_blobs = []
-    extracted_text = []
-    for img in pdf_img.sequence:
-        page = wi(image=img)
-        img_blobs.append(page.make_blob('jpeg'))
-
-    for imgBlob in img_blobs:
-        im = Image.open(io.BytesIO(imgBlob))
-        text = pytesseract.image_to_string(im, lang='pl')
-        extracted_text.append(text)
-
-    return extracted_text
-
-
-def get_correct_prompt(prompt: str, max_tokens: int):
-    if len(prompt) > max_tokens:
-        pass
-    # TODO
-
-
 def send_openai_request(engine, prompt, max_tokens=1024) -> str:
     response = openai.Completion.create(
         model=engine,
