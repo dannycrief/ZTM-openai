@@ -18,5 +18,5 @@ if __name__ == "__main__":
         user_input = input("SK: ")
         if user_input == "exit":
             break
-        gpt_response = send_openai_request(engine=model, prompt=user_input)
+        gpt_response = send_openai_request(engine=model, prompt=f"{doc}\n{user_input}")
         print("GPT:", gpt_response)

@@ -49,13 +49,15 @@ def get_correct_prompt(prompt: str, max_tokens: int):
     # TODO
 
 
-def send_openai_request(engine, prompt, max_tokens=4096):
+def send_openai_request(engine, prompt, max_tokens=1024) -> str:
     response = openai.Completion.create(
-        engine=engine,
-        prompt=get_correct_prompt(prompt, max_tokens),
+        model=engine,
+        prompt=prompt,
+        temperature=0,
         max_tokens=max_tokens,
-        n=1,
-        stop=None,
-        temperature=0.5
+        top_p=1,
+        frequency_penalty=0.0,
+        presence_penalty=0.0,
+        stop=["?"]
     )
-    return response.choices[0].text.replace("\n\n", "")
+    return response.choices[0].text.replace("\n", "")
