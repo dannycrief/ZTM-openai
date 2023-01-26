@@ -1,8 +1,4 @@
 import os
-import io
-from PIL import Image
-import pytesseract
-from wand.image import Image as wi
 import openai
 
 
