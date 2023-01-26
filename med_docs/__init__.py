@@ -1,16 +1,14 @@
-from typing import List, Any
-
-from pypdf import PdfReader
 import os
 import io
 from PIL import Image
 import pytesseract
 from wand.image import Image as wi
-import gc
 import openai
 
 
-def fetch_document(document: str):
+def fetch_document(document: str) -> str:
+    if not os.path.exists(document):
+        raise Exception("ERROR: File does not exist.")
     if ".txt" in document:
         return fetch_txt(document)
     # pdf_text = ""
@@ -20,13 +18,12 @@ def fetch_document(document: str):
     #     page = reader.pages[i]
     #     pdf_text += page.extract_text()
     # print(pdf_text)
-    text = get_text_from_image(pdf_path=document)
-    print(text)
+    return ""
 
 
 def fetch_txt(filename_txt: str) -> str:
     fetched_file = open(filename_txt, "r", encoding='utf-8')
-    return "".join(fetched_file.readlines())
+    return "".join(fetched_file.readlines()).replace("\n", " ")
 
 
 def get_text_from_image(pdf_path: str) -> list[str]:
@@ -46,13 +43,19 @@ def get_text_from_image(pdf_path: str) -> list[str]:
     return extracted_text
 
 
-def send_openai_request(engine, prompt, max_tokens=1024):
+def get_correct_prompt(prompt: str, max_tokens: int):
+    if len(prompt) > max_tokens:
+        pass
+    # TODO
+
+
+def send_openai_request(engine, prompt, max_tokens=4096):
     response = openai.Completion.create(
         engine=engine,
-        prompt=prompt,
+        prompt=get_correct_prompt(prompt, max_tokens),
         max_tokens=max_tokens,
         n=1,
         stop=None,
         temperature=0.5
     )
-    return response
+    return response.choices[0].text.replace("\n\n", "")
